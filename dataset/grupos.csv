@@ -1,0 +1,5 @@
+grupo,nome,municipios,mediana_pct_secoes_acessiveis,mediana_pct_locais_sem_acess,mediana_pcd_por_mil,mediana_eleitores,mediana_pct_pcd_sem_acess,eleitores,pcd_total,pcd_sem_acess
+1,Baixa acessibilidade,1823,4.17,88.89,9.47,7642.0,93.59,21736403,238319,211234
+2,Municípios maiores com acessibilidade parcial,804,40.23,9.09,12.14,57023.5,38.89,106387240,1546170,575812
+3,Alta acessibilidade e mais eleitores com deficiência cadastrados,1188,77.2,0.0,16.7,7235.5,16.9,11784778,243094,53384
+4,Alta acessibilidade e menos eleitores com deficiência cadastrados,1756,87.5,0.0,8.12,8088.0,12.0,17918166,144123,24742

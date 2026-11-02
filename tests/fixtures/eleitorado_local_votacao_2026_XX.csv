@@ -1,0 +1,8 @@
+"NR_TURNO";"SG_UF";"CD_MUNICIPIO";"NM_MUNICIPIO";"NR_ZONA";"NR_SECAO";"DS_TIPO_SECAO_AGREGADA";"NR_SECAO_PRINCIPAL";"NR_LOCAL_VOTACAO";"NM_LOCAL_VOTACAO";"DS_ENDERECO";"NM_BAIRRO";"NR_LATITUDE";"NR_LONGITUDE";"DS_SITU_SECAO_ACESSIBILIDADE";"QT_ELEITOR_SECAO"
+"1";"XX";"00001";"CIDADE A";"100";"1";"Principal";"-1";"10";"ESCOLA UM";"RUA A, 1";"CENTRO";"-22,0";"-47,0";"Com acessibilidade";"300"
+"1";"XX";"00001";"CIDADE A";"100";"2";"Principal";"-1";"10";"ESCOLA UM";"RUA A, 1";"CENTRO";"-22,0";"-47,0";"Com acessibilidade";"300"
+"1";"XX";"00001";"CIDADE A";"100";"3";"Principal";"-1";"20";"ESCOLA DOIS";"RUA B, 2";"VILA";"-22,1";"-47,1";"Com acessibilidade";"200"
+"1";"XX";"00001";"CIDADE A";"100";"4";"Principal";"-1";"20";"ESCOLA DOIS";"RUA B, 2";"VILA";"-22,1";"-47,1";"Sem acessibilidade";"200"
+"1";"XX";"00002";"CIDADE B";"100";"5";"Principal";"-1";"10";"ESCOLA TRES";"RUA C, 3";"RURAL";"-1";"-1";"Sem acessibilidade";"100"
+"1";"XX";"00002";"CIDADE B";"100";"7";"Agregada";"5";"10";"ESCOLA TRES";"RUA C, 3";"RURAL";"-1";"-1";"Sem acessibilidade";"50"
+"2";"XX";"00001";"CIDADE A";"100";"1";"Principal";"-1";"10";"ESCOLA UM";"RUA A, 1";"CENTRO";"-22,0";"-47,0";"Com acessibilidade";"300"

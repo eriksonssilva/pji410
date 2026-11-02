@@ -1,0 +1,11 @@
+{
+  "k": 4,
+  "indicadores": [
+    "pct_secoes_acessiveis",
+    "pct_locais_sem_acess",
+    "pcd_por_mil",
+    "log_eleitores"
+  ],
+  "silhueta": 0.2851,
+  "semente": 42
+}

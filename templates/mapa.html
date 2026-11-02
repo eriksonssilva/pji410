@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block titulo %}Mapa do Brasil – perfis de acessibilidade eleitoral{% endblock %}
+{% block head %}<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">{% endblock %}
+{% block conteudo %}
+<h1>Mapa dos perfis de acessibilidade eleitoral</h1>
+<p>Cada ponto é um município, colorido pelo grupo em que o k-means o colocou. Clique em um ponto para ver o município.
+  Use as caixas abaixo para mostrar ou esconder cada grupo.</p>
+<fieldset class="filtros">
+  <legend>Grupos exibidos</legend>
+  {% for g in grupos %}
+  <label style="--cor: {{ cores[g.grupo] }}"><input type="checkbox" value="{{ g.grupo }}" checked>
+    <span class="bolinha" aria-hidden="true"></span>Grupo {{ g.grupo }}: {{ g.nome }} ({{ g.municipios|br }})</label>
+  {% endfor %}
+</fieldset>
+<div id="mapa" class="mapa-grande" role="img" aria-label="Mapa do Brasil com os municípios coloridos por grupo"></div>
+<p class="dica">O ponto fica no centro dos locais de votação do município. Uma tabela com todos os municípios está no <a href="/sobre#dados">conjunto de dados</a>.</p>
+{% endblock %}
+{% block scripts %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+  const cores = {{ cores|tojson }}, nomes = {{ grupos|map(attribute='nome')|list|tojson }};
+  const mapa = L.map('mapa', {preferCanvas: true}).setView([-15, -52], 4);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: '© OpenStreetMap'}).addTo(mapa);
+  const camadas = {};
+  fetch('/api/mapa').then(r => r.json()).then(geo => {
+    for (const f of geo.features) {
+      const p = f.properties, [lon, lat] = f.geometry.coordinates;
+      (camadas[p.grupo] ??= L.layerGroup().addTo(mapa));
+      L.circleMarker([lat, lon], {radius: 4, weight: .5, color: '#333', fillColor: cores[p.grupo], fillOpacity: .85})
+        .bindPopup(`<strong>${p.nm_municipio}/${p.uf}</strong><br>Grupo ${p.grupo}: ${nomes[p.grupo - 1]}<br>` +
+                   `${p.pct_secoes_acessiveis.toLocaleString('pt-BR')}% das seções constam como acessíveis<br>` +
+                   `<a href="/municipio/${p.cd_municipio}">Ver município</a>`)
+        .addTo(camadas[p.grupo]);
+    }
+  });
+  document.querySelectorAll('.filtros input').forEach(cb => cb.addEventListener('change', () => {
+    const c = camadas[cb.value];
+    if (c) cb.checked ? c.addTo(mapa) : mapa.removeLayer(c);
+  }));
+</script>
+{% endblock %}

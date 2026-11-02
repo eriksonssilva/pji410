@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block conteudo %}
+<section class="destaque">
+  <h1>A sua seção eleitoral consta como acessível?</h1>
+  <p>No Brasil, só <strong>{{ brasil.pct_secoes_acessiveis|br(1) }}%</strong> das {{ brasil.secoes|br }} seções eleitorais
+    constam como acessíveis nos dados do TSE. <strong>{{ brasil.pcd_sem_acess|br }}</strong> eleitores com deficiência
+    cadastrada ({{ brasil.pct_pcd_sem_acess|br(1) }}%) votam em seções que não constam como acessíveis.</p>
+</section>
+
+<div class="duas-colunas">
+  <section class="cartao">
+    <h2>Consultar minha seção</h2>
+    <p class="dica">A zona e a seção estão no seu título de eleitor ou no aplicativo e-Título.</p>
+    <form action="/secao" method="get">
+      <label for="uf-secao">Estado (UF)</label>
+      <select id="uf-secao" name="uf" required>
+        {% for uf in ufs %}<option value="{{ uf }}" {% if uf == 'MG' %}selected{% endif %}>{{ uf }}</option>{% endfor %}
+      </select>
+      <label for="zona">Zona</label>
+      <input id="zona" name="zona" type="number" inputmode="numeric" min="1" required>
+      <label for="secao">Seção</label>
+      <input id="secao" name="secao" type="number" inputmode="numeric" min="1" required>
+      <button type="submit">Consultar</button>
+    </form>
+  </section>
+
+  <section class="cartao">
+    <h2>Ver meu município</h2>
+    <p class="dica">Veja os indicadores do município, o perfil (grupo) em que ele se encaixa e todos os locais de votação.</p>
+    <form id="form-municipio">
+      <label for="uf-mun">Estado (UF)</label>
+      <select id="uf-mun" required>
+        {% for uf in ufs %}<option value="{{ uf }}" {% if uf == 'MG' %}selected{% endif %}>{{ uf }}</option>{% endfor %}
+      </select>
+      <label for="municipio">Município</label>
+      <select id="municipio" required></select>
+      <button type="submit">Ver município</button>
+    </form>
+  </section>
+</div>
+
+<section>
+  <h2>Os quatro perfis de municípios</h2>
+  <p>Agrupamos os {{ brasil.municipios|br }} municípios com um algoritmo de aprendizado de máquina (k-means), a partir de
+    quatro indicadores. <a href="/grupos">Entenda como os grupos foram formados</a>.</p>
+  <ul class="lista-grupos">
+    {% for g in grupos %}
+    <li style="--cor: {{ cores[g.grupo] }}">
+      <h3><span class="bolinha" aria-hidden="true"></span>Grupo {{ g.grupo }}: {{ g.nome }}</h3>
+      <p>{{ descricoes[g.grupo] }}</p>
+      <p class="numeros">{{ g.municipios|br }} municípios · {{ g.pcd_sem_acess|br }} eleitores com deficiência em seções sem acessibilidade</p>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endblock %}
+{% block scripts %}
+<script>
+  const uf = document.getElementById('uf-mun'), mun = document.getElementById('municipio');
+  async function carregar() {
+    const r = await fetch('/api/municipios?uf=' + uf.value);
+    mun.innerHTML = (await r.json()).map(m => `<option value="${m.cd_municipio}">${m.nm_municipio}</option>`).join('');
+  }
+  uf.addEventListener('change', carregar);
+  carregar();
+  document.getElementById('form-municipio').addEventListener('submit', e => {
+    e.preventDefault();
+    location.href = '/municipio/' + mun.value;
+  });
+</script>
+{% endblock %}

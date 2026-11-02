@@ -1,0 +1,40 @@
+:root { --azul: #1b3a5c; --fundo: #f5f6f8; --texto: #1d1d1f; --borda: #d0d4da; }
+* { box-sizing: border-box; }
+body { margin: 0; font: 17px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: var(--texto); background: var(--fundo); }
+a { color: #0b5394; }
+a:focus, button:focus, input:focus, select:focus { outline: 3px solid #E69F00; outline-offset: 2px; }
+.pular { position: absolute; left: -999px; } .pular:focus { left: 1rem; top: 1rem; background: #fff; padding: .5rem; z-index: 2000; }
+.topo { background: var(--azul); color: #fff; padding: .8rem 1.2rem; display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; align-items: center; }
+.topo a { color: #fff; } .marca { font-weight: 700; font-size: 1.15rem; text-decoration: none; }
+.topo nav { display: flex; flex-wrap: wrap; gap: 1rem; }
+main { max-width: 1100px; margin: 0 auto; padding: 1.2rem; }
+h1 { font-size: 1.8rem; line-height: 1.25; margin: .4rem 0 .8rem; } h2 { font-size: 1.3rem; margin-top: 0; }
+.destaque { background: #fff; border-left: 6px solid var(--azul); padding: 1rem 1.4rem; margin-bottom: 1.2rem; }
+.cartao { background: #fff; border: 1px solid var(--borda); border-radius: 8px; padding: 1.2rem; margin-bottom: 1.2rem; }
+.duas-colunas { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.2rem; }
+form { display: grid; gap: .3rem; } label { font-weight: 600; margin-top: .4rem; }
+input, select { font: inherit; padding: .5rem; border: 1px solid #8a919c; border-radius: 6px; }
+button, .botao { font: inherit; font-weight: 600; background: var(--azul); color: #fff; border: 0; border-radius: 6px; padding: .6rem 1rem; margin-top: .6rem; cursor: pointer; text-decoration: none; display: inline-block; }
+.dica { color: #4a4f57; font-size: .93rem; }
+.resultado { border-radius: 8px; padding: 1rem 1.4rem; margin-bottom: 1.2rem; border: 2px solid; }
+.resultado.sim { background: #e6f2fa; border-color: #0072B2; } .resultado.nao { background: #fbece5; border-color: #D55E00; }
+.resultado h1 { margin-top: 0; }
+.bolinha { display: inline-block; width: .9em; height: .9em; border-radius: 50%; background: var(--cor); border: 1px solid #333; margin-right: .4em; vertical-align: -.1em; }
+.selo { display: inline-block; border: 2px solid var(--cor); border-radius: 999px; padding: .1rem .7rem; font-weight: 600; background: #fff; }
+.lista-grupos { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
+.lista-grupos li { background: #fff; border: 1px solid var(--borda); border-top: 6px solid var(--cor); border-radius: 8px; padding: .8rem 1rem; }
+.lista-grupos h3 { margin: 0 0 .3rem; font-size: 1.05rem; } .numeros { font-size: .9rem; color: #4a4f57; }
+.indicadores { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+.indicadores li { background: #fff; border: 1px solid var(--borda); border-radius: 8px; padding: .8rem 1rem; }
+.valor { display: block; font-size: 1.6rem; font-weight: 700; color: var(--azul); }
+.tabela { border-collapse: collapse; width: 100%; margin: .8rem 0; font-size: .93rem; }
+.tabela th, .tabela td { border-bottom: 1px solid var(--borda); padding: .4rem .5rem; text-align: left; vertical-align: top; }
+.tabela caption { text-align: left; font-weight: 600; padding: .3rem 0; } .escolhido { background: #fff4d6; font-weight: 600; }
+.rolagem { overflow-x: auto; max-height: 480px; overflow-y: auto; }
+.mapa-pequeno { height: 260px; } .mapa-medio { height: 420px; } .mapa-grande { height: 620px; border-radius: 8px; }
+.legenda { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: .5rem 1.5rem; font-size: .93rem; }
+.filtros { border: 1px solid var(--borda); border-radius: 8px; background: #fff; display: flex; flex-wrap: wrap; gap: .4rem 1.4rem; margin-bottom: 1rem; }
+.filtros label { font-weight: 400; margin: 0; }
+.migalha { font-size: .93rem; color: #4a4f57; }
+.rodape { max-width: 1100px; margin: 1rem auto 2rem; padding: 0 1.2rem; font-size: .9rem; color: #4a4f57; }
+.rolagem-x { overflow-x: auto; }

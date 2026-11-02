@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block titulo %}Minha Seção é Acessível?{% endblock %}</title>
+  <link rel="stylesheet" href="/static/estilo.css">
+  {% block head %}{% endblock %}
+</head>
+<body>
+  <a class="pular" href="#conteudo">Pular para o conteúdo</a>
+  <header class="topo">
+    <a class="marca" href="/">Minha Seção é Acessível?</a>
+    <nav aria-label="Navegação principal">
+      <a href="/">Consultar</a>
+      <a href="/mapa">Mapa do Brasil</a>
+      <a href="/grupos">Perfis de municípios</a>
+      <a href="/sobre">Sobre os dados</a>
+    </nav>
+  </header>
+  <main id="conteudo">
+    {% block conteudo %}{% endblock %}
+  </main>
+  <footer class="rodape">
+    <p><strong>Atenção:</strong> as informações de acessibilidade são declaradas pela Justiça Eleitoral nos
+      dados abertos do TSE (eleições 2026) e <strong>não foram verificadas em campo</strong>. Quando dizemos que uma
+      seção "consta como acessível", é isso que os dados informam.</p>
+    <p>Projeto Integrador em Computação IV – Univesp, 2026. Fonte: <a href="https://dadosabertos.tse.jus.br/">Portal de Dados Abertos do TSE</a>.</p>
+  </footer>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

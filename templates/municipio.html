@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block titulo %}{{ m.nm_municipio }}/{{ m.uf }} – acessibilidade eleitoral{% endblock %}
+{% block head %}<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">{% endblock %}
+{% block conteudo %}
+<p class="migalha"><a href="/">Início</a> › {{ m.nm_municipio }}/{{ m.uf }}</p>
+<h1>{{ m.nm_municipio }}/{{ m.uf }}</h1>
+<p>{% with g = grupo %}{% include "_grupo.html" %}{% endwith %}</p>
+<p>{{ descricoes[m.grupo] }} <a href="/grupos">O que são os grupos?</a></p>
+
+<ul class="indicadores">
+  <li><span class="valor">{{ m.pct_secoes_acessiveis|br(1) }}%</span> das {{ m.qt_secoes|br }} seções constam como acessíveis</li>
+  <li><span class="valor">{{ m.qt_locais_sem_acess }} de {{ m.qt_locais }}</span> locais de votação não têm nenhuma seção que conste como acessível</li>
+  <li><span class="valor">{{ m.pcd_sem_acess|br }} de {{ m.pcd_total|br }}</span> eleitores com deficiência cadastrada ({{ m.pct_pcd_sem_acess|br(1) }}%) votam em seções sem acessibilidade</li>
+  <li><span class="valor">{{ m.pcd_por_mil|br(1) }}</span> eleitores com deficiência cadastrados a cada mil eleitores</li>
+</ul>
+
+<section class="cartao">
+  <h2>Comparação com o grupo e com o Brasil</h2>
+  <canvas id="grafico" height="220" role="img" aria-label="Gráfico de barras comparando o município, a mediana do grupo e o Brasil"></canvas>
+  <table class="tabela">
+    <caption>Os mesmos valores do gráfico</caption>
+    <thead><tr><th scope="col">Indicador</th><th scope="col">{{ m.nm_municipio }}</th><th scope="col">Mediana do grupo {{ m.grupo }}</th><th scope="col">Brasil</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">Seções que constam como acessíveis (%)</th><td>{{ m.pct_secoes_acessiveis|br(1) }}</td><td>{{ grupo.mediana_pct_secoes_acessiveis|br(1) }}</td><td>{{ brasil.pct_secoes_acessiveis|br(1) }}</td></tr>
+      <tr><th scope="row">Locais sem nenhuma seção acessível (%)</th><td>{{ m.pct_locais_sem_acess|br(1) }}</td><td>{{ grupo.mediana_pct_locais_sem_acess|br(1) }}</td><td>{{ brasil.pct_locais_sem_acess|br(1) }}</td></tr>
+      <tr><th scope="row">Eleitores com deficiência em seções sem acessibilidade (%)</th><td>{{ m.pct_pcd_sem_acess|br(1) }}</td><td>{{ grupo.mediana_pct_pcd_sem_acess|br(1) }}</td><td>{{ brasil.pct_pcd_sem_acess|br(1) }}</td></tr>
+    </tbody>
+  </table>
+  <p class="dica">No Brasil, o valor é calculado sobre o total de seções, locais e eleitores do país.</p>
+</section>
+
+<section class="cartao">
+  <h2>Locais de votação</h2>
+  <div id="mapa-locais" class="mapa-medio" role="img" aria-label="Mapa dos locais de votação do município, coloridos pela situação de acessibilidade"></div>
+  <ul class="legenda">
+    <li><span class="bolinha" style="--cor:#0072B2"></span>Todas as seções constam como acessíveis</li>
+    <li><span class="bolinha" style="--cor:#E69F00"></span>Parte das seções</li>
+    <li><span class="bolinha" style="--cor:#D55E00"></span>Nenhuma seção</li>
+  </ul>
+  <div class="rolagem">
+  <table class="tabela">
+    <thead><tr><th scope="col">Local</th><th scope="col">Bairro</th><th scope="col">Zona</th><th scope="col">Seções</th><th scope="col">Constam como acessíveis</th><th scope="col">Situação</th></tr></thead>
+    <tbody>
+      {% for l in locais %}
+      <tr><td>{{ l.nm_local }}</td><td>{{ l.bairro }}</td><td>{{ l.nr_zona }}</td><td>{{ l.qt_secoes }}</td><td>{{ l.qt_secoes_acessiveis }}</td>
+        <td>{{ {'todas': 'Todas', 'parcial': 'Parte', 'nenhuma': 'Nenhuma'}[l.status] }}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+</section>
+{% endblock %}
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+  new Chart(document.getElementById('grafico'), {
+    type: 'bar',
+    data: {
+      labels: ['Seções acessíveis', 'Locais sem nenhuma seção acessível', 'Eleitores com deficiência em seção sem acessibilidade'],
+      datasets: [
+        {label: {{ m.nm_municipio|tojson }}, backgroundColor: '#1b3a5c',
+         data: [{{ m.pct_secoes_acessiveis }}, {{ m.pct_locais_sem_acess }}, {{ m.pct_pcd_sem_acess }}]},
+        {label: 'Mediana do grupo {{ m.grupo }}', backgroundColor: {{ cores[m.grupo]|tojson }},
+         data: [{{ grupo.mediana_pct_secoes_acessiveis }}, {{ grupo.mediana_pct_locais_sem_acess }}, {{ grupo.mediana_pct_pcd_sem_acess }}]},
+        {label: 'Brasil', backgroundColor: '#999999',
+         data: [{{ brasil.pct_secoes_acessiveis }}, {{ brasil.pct_locais_sem_acess }}, {{ brasil.pct_pcd_sem_acess }}]},
+      ],
+    },
+    options: {indexAxis: 'y', scales: {x: {min: 0, max: 100, title: {display: true, text: '%'}}}},
+  });
+
+  const cores = {todas: '#0072B2', parcial: '#E69F00', nenhuma: '#D55E00'};
+  const situacao = {todas: 'todas as seções', parcial: 'parte das seções', nenhuma: 'nenhuma seção'};
+  fetch('/api/locais/{{ m.cd_municipio }}').then(r => r.json()).then(locais => {
+    const mapa = L.map('mapa-locais', {preferCanvas: true});
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: '© OpenStreetMap'}).addTo(mapa);
+    const pontos = locais.filter(l => l.lat !== null).map(l =>
+      L.circleMarker([l.lat, l.lon], {radius: 7, color: '#222', weight: 1, fillColor: cores[l.status], fillOpacity: .9})
+        .bindPopup(`<strong>${l.nm_local}</strong><br>${l.qt_secoes_acessiveis} de ${l.qt_secoes} seções constam como acessíveis (${situacao[l.status]})`)
+        .addTo(mapa));
+    // o zoom ignora coordenadas muito longe da mediana (há erros de coordenada nos dados do TSE)
+    const med = k => { const v = locais.filter(l => l.lat !== null).map(l => l[k]).sort((a, b) => a - b); return v[Math.floor(v.length / 2)]; };
+    const [mlat, mlon] = [med('lat'), med('lon')];
+    const perto = pontos.filter(p => Math.hypot(p.getLatLng().lat - mlat, p.getLatLng().lng - mlon) < 1);
+    if (perto.length) mapa.fitBounds(L.featureGroup(perto).getBounds().pad(0.1));
+  });
+</script>
+{% endblock %}

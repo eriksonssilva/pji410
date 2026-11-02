@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block titulo %}Seção {{ s.nr_secao }}, zona {{ s.nr_zona }} – {{ s.uf }}{% endblock %}
+{% block head %}<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">{% endblock %}
+{% block conteudo %}
+{% set l = s.local %}{% set m = s.municipio %}
+<p class="migalha"><a href="/">Início</a> › Seção {{ s.nr_secao }}, zona {{ s.nr_zona }} ({{ m.nm_municipio }}/{{ s.uf }})</p>
+<section class="resultado {{ 'sim' if s.consta_acessivel else 'nao' }}" role="status">
+  <h1>{% if s.consta_acessivel %}A sua seção consta como acessível nos dados do TSE{% else %}A sua seção <u>não</u> consta como acessível nos dados do TSE{% endif %}</h1>
+  <p>Seção {{ s.nr_secao }} · Zona {{ s.nr_zona }} · {{ m.nm_municipio }}/{{ s.uf }} · {{ s.qt_eleitores|br }} eleitores</p>
+  {% if s.agregada %}<p>Esta seção foi agregada à seção {{ s.nr_secao_principal }}, que funciona no mesmo local.</p>{% endif %}
+</section>
+
+<div class="duas-colunas">
+  <section class="cartao">
+    <h2>Local de votação</h2>
+    <p><strong>{{ l.nm_local }}</strong><br>{{ l.endereco }} – {{ l.bairro }}</p>
+    <p>{{ l.qt_secoes_acessiveis }} de {{ l.qt_secoes }} seções deste local constam como acessíveis.</p>
+    {% if l.lat %}<div id="mapa-local" class="mapa-pequeno" role="img" aria-label="Mapa com a localização do local de votação"></div>{% endif %}
+  </section>
+  <section class="cartao">
+    <h2>E agora?</h2>
+    {% if not s.consta_acessivel %}
+    <p>Se você ou alguém que vota nesta seção tem deficiência ou mobilidade reduzida, procure o cartório eleitoral
+      ou o site do TSE para saber como solicitar uma seção com acessibilidade antes da próxima eleição.</p>
+    {% else %}
+    <p>Os dados indicam acessibilidade, mas eles não são verificados em campo. Se você encontrar barreiras no dia da
+      votação, avise os mesários e o cartório eleitoral.</p>
+    {% endif %}
+    <p>O município de {{ m.nm_municipio }} está no {% with g = grupo %}{% include "_grupo.html" %}{% endwith %}</p>
+    <p><a class="botao" href="/municipio/{{ m.cd_municipio }}">Ver todos os locais de {{ m.nm_municipio }}</a></p>
+  </section>
+</div>
+{% endblock %}
+{% block scripts %}
+{% if s.local.lat %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+  const p = [{{ s.local.lat }}, {{ s.local.lon }}];
+  const mapa = L.map('mapa-local').setView(p, 16);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: '© OpenStreetMap'}).addTo(mapa);
+  L.marker(p, {alt: {{ s.local.nm_local|tojson }}}).addTo(mapa).bindPopup({{ s.local.nm_local|tojson }});
+</script>
+{% endif %}
+{% endblock %}
