@@ -1,11 +1,11 @@
 {% extends "base.html" %}
-{% block titulo %}Perfis de municípios – como os grupos foram formados{% endblock %}
+{% block titulo %}Como os grupos de municípios foram formados{% endblock %}
 {% block conteudo %}
 <h1>Os quatro perfis de acessibilidade eleitoral</h1>
-<p>Um ranking por um único número esconde situações diferentes. Um município pequeno sem nenhuma seção acessível e uma
-  cidade grande com metade das seções acessíveis pedem ações diferentes. Por isso, usamos um algoritmo de aprendizado de
-  máquina não supervisionado, o <strong>k-means</strong>, que junta municípios parecidos sem que a gente diga antes quais
-  são os grupos.</p>
+<p>Um município pequeno sem nenhuma seção acessível e uma cidade grande com metade das seções acessíveis aparecem
+  perto um do outro num ranking pelo percentual de seções acessíveis, mas precisam de ações diferentes. Para separar
+  esses casos, o projeto usa o k-means, um algoritmo de aprendizado de máquina não supervisionado. Ele junta
+  municípios com indicadores parecidos sem receber uma lista de grupos pronta.</p>
 
 <section class="cartao">
   <h2>Os grupos encontrados</h2>
@@ -31,17 +31,19 @@
 <section class="cartao">
   <h2>Como os grupos foram formados</h2>
   <ol>
-    <li><strong>Indicadores.</strong> Para cada município calculamos: (1) % de seções que constam como acessíveis;
-      (2) % de locais sem nenhuma seção acessível; (3) eleitores com deficiência cadastrados a cada mil eleitores; e
-      (4) porte (número de eleitores). O % de eleitores com deficiência em seções sem acessibilidade ficou de fora do
-      modelo porque repete quase a mesma informação do indicador 1 (correlação de −0,95). Ele é usado só para
-      interpretar os grupos.</li>
-    <li><strong>Padronização.</strong> O porte e a proporção de eleitores com deficiência passam por logaritmo (há
-      municípios muito maiores que outros). Depois, todos os indicadores são padronizados (média 0, desvio-padrão 1),
-      para que nenhum pese mais só por estar em outra escala.</li>
-    <li><strong>Escolha do número de grupos.</strong> Testamos de 2 a 8 grupos e medimos a inércia (método do cotovelo)
-      e o coeficiente de silhueta (de −1 a 1; quanto maior, mais separados os grupos).</li>
-    <li><strong>Interpretação.</strong> Cada grupo recebeu um nome a partir das medianas dos indicadores.</li>
+    <li><strong>Indicadores.</strong> Para cada município, o projeto calculou quatro números. O primeiro é o percentual
+      de seções que constam como acessíveis. O segundo é o percentual de locais de votação sem nenhuma seção acessível.
+      O terceiro é o número de eleitores com deficiência cadastrados a cada mil eleitores. O quarto é o porte, medido
+      pelo número de eleitores. O percentual de eleitores com deficiência em seções sem acessibilidade ficou fora do
+      modelo porque quase repete o primeiro indicador (correlação de -0,95). Ele aparece só na descrição
+      dos grupos.</li>
+    <li><strong>Padronização.</strong> Alguns municípios têm milhares de vezes mais eleitores que outros. Por isso, o
+      porte e a proporção de eleitores com deficiência entram no modelo em escala logarítmica. Depois, cada indicador
+      é convertido para média 0 e desvio-padrão 1, para que nenhum pese mais só por usar uma escala maior.</li>
+    <li><strong>Número de grupos.</strong> O modelo rodou com 2 a 8 grupos. Para cada caso, o projeto mediu a inércia,
+      usada no método do cotovelo, e o coeficiente de silhueta, que vai de -1 a 1 e cresce quando os grupos ficam mais
+      separados.</li>
+    <li><strong>Nomes dos grupos.</strong> Cada grupo recebeu um nome a partir das medianas dos seus indicadores.</li>
   </ol>
   <canvas id="grafico-k" height="200" role="img" aria-label="Gráfico da silhueta e da inércia para cada número de grupos"></canvas>
   <table class="tabela">
@@ -49,10 +51,10 @@
     <thead><tr><th scope="col">Número de grupos (k)</th><th scope="col">Silhueta</th><th scope="col">Inércia</th></tr></thead>
     <tbody>{% for a in avaliacao %}<tr{% if a.k == kmeans.k %} class="escolhido"{% endif %}><td>{{ a.k }}{% if a.k == kmeans.k %} (escolhido){% endif %}</td><td>{{ a.silhueta|br(3) }}</td><td>{{ a.inercia|br }}</td></tr>{% endfor %}</tbody>
   </table>
-  <p>A silhueta é maior com 2 grupos, mas nesse caso o modelo só separa "acessível" de "não acessível", o que uma regra
-    simples já faria. Com <strong>{{ kmeans.k }} grupos</strong> (silhueta {{ kmeans.silhueta|br(3) }}, separação moderada)
-    aparecem perfis com significado prático, como o grupo 2, de municípios maiores com acessibilidade parcial, que reúne
-    a maior parte dos eleitores com deficiência afetados.</p>
+  <p>A silhueta é maior com 2 grupos, mas nesse caso o modelo só separa municípios com e sem acessibilidade, o que uma
+    regra simples já faria. Com {{ kmeans.k }} grupos a silhueta é {{ kmeans.silhueta|br(3) }}, uma separação moderada,
+    e aparecem perfis que pedem ações diferentes. O grupo 2, por exemplo, reúne municípios maiores com acessibilidade
+    parcial e concentra a maioria dos eleitores com deficiência que votam em seções sem acessibilidade.</p>
 </section>
 {% endblock %}
 {% block scripts %}

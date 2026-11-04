@@ -53,7 +53,7 @@ def test_mapa_tem_um_ponto_por_municipio_com_coordenada(cliente):
 def test_paginas_html(cliente):
     for caminho in ['/', '/mapa', '/grupos', '/sobre', '/municipio/50350']:
         r = cliente.get(caminho)
-        assert r.status_code == 200 and 'não foram verificadas em campo' in r.text, caminho
+        assert r.status_code == 200 and 'não foi verificada em campo' in r.text, caminho
 
 
 def test_nenhuma_pagina_afirma_que_secao_e_acessivel(cliente):

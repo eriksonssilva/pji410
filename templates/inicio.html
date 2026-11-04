@@ -2,9 +2,9 @@
 {% block conteudo %}
 <section class="destaque">
   <h1>A sua seção eleitoral consta como acessível?</h1>
-  <p>No Brasil, só <strong>{{ brasil.pct_secoes_acessiveis|br(1) }}%</strong> das {{ brasil.secoes|br }} seções eleitorais
-    constam como acessíveis nos dados do TSE. <strong>{{ brasil.pcd_sem_acess|br }}</strong> eleitores com deficiência
-    cadastrada ({{ brasil.pct_pcd_sem_acess|br(1) }}%) votam em seções que não constam como acessíveis.</p>
+  <p>No Brasil, só {{ brasil.pct_secoes_acessiveis|br(1) }}% das {{ brasil.secoes|br }} seções eleitorais constam
+    como acessíveis nos dados do TSE. Dos eleitores com deficiência cadastrada, {{ brasil.pcd_sem_acess|br }}
+    ({{ brasil.pct_pcd_sem_acess|br(1) }}%) votam em seções que não constam como acessíveis.</p>
 </section>
 
 <div class="duas-colunas">
@@ -26,7 +26,7 @@
 
   <section class="cartao">
     <h2>Ver meu município</h2>
-    <p class="dica">Veja os indicadores do município, o perfil (grupo) em que ele se encaixa e todos os locais de votação.</p>
+    <p class="dica">Mostra os números do município, o grupo em que ele ficou e a lista de locais de votação.</p>
     <form id="form-municipio">
       <label for="uf-mun">Estado (UF)</label>
       <select id="uf-mun" required>
@@ -41,14 +41,14 @@
 
 <section>
   <h2>Os quatro perfis de municípios</h2>
-  <p>Agrupamos os {{ brasil.municipios|br }} municípios com um algoritmo de aprendizado de máquina (k-means), a partir de
-    quatro indicadores. <a href="/grupos">Entenda como os grupos foram formados</a>.</p>
+  <p>Um algoritmo de aprendizado de máquina, o k-means, separou os {{ brasil.municipios|br }} municípios em quatro grupos
+    a partir de quatro indicadores. <a href="/grupos">Veja como os grupos foram formados</a>.</p>
   <ul class="lista-grupos">
     {% for g in grupos %}
     <li style="--cor: {{ cores[g.grupo] }}">
       <h3><span class="bolinha" aria-hidden="true"></span>Grupo {{ g.grupo }}: {{ g.nome }}</h3>
       <p>{{ descricoes[g.grupo] }}</p>
-      <p class="numeros">{{ g.municipios|br }} municípios · {{ g.pcd_sem_acess|br }} eleitores com deficiência em seções sem acessibilidade</p>
+      <p class="numeros">{{ g.municipios|br }} municípios. Neles, {{ g.pcd_sem_acess|br }} eleitores com deficiência votam em seções sem acessibilidade.</p>
     </li>
     {% endfor %}
   </ul>

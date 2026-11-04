@@ -5,34 +5,34 @@
 <section class="cartao">
   <h2>Fontes</h2>
   <ul>
-    <li>Eleitorado por local de votação – 2026 (TSE): {{ brasil.secoes|br }} seções em {{ brasil.locais|br }} locais de votação de {{ brasil.municipios|br }} municípios.</li>
-    <li>Perfil do eleitorado com deficiência – 2026 (TSE): {{ brasil.pcd_total|br }} eleitores com deficiência cadastrada.</li>
+    <li>Eleitorado por local de votação 2026, do TSE. São {{ brasil.secoes|br }} seções em {{ brasil.locais|br }} locais de votação de {{ brasil.municipios|br }} municípios.</li>
+    <li>Perfil do eleitorado com deficiência 2026, do TSE. São {{ brasil.pcd_total|br }} eleitores com deficiência cadastrada.</li>
   </ul>
-  <p>Usamos o 1º turno, que inclui todos os municípios. Eleitores no exterior não entram na análise.</p>
+  <p>O site usa os dados do 1º turno, que incluem todos os municípios. Os eleitores que votam no exterior ficaram fora da análise.</p>
 </section>
 <section class="cartao">
   <h2>Limitações</h2>
   <ul>
-    <li>A acessibilidade é <strong>declarada pela Justiça Eleitoral</strong> e não foi verificada em campo. Por isso o site
-      diz que uma seção "consta como acessível", e não que ela "é acessível".</li>
-    <li>O cadastro de deficiência inclui apenas quem informou essa condição ao TSE, então o número real de eleitores com
-      deficiência tende a ser maior.</li>
-    <li>Algumas coordenadas de locais de votação nos dados do TSE estão erradas (por exemplo, locais de Poços de
-      Caldas/MG com coordenadas no Rio Grande do Sul). O ponto de cada município no mapa usa a mediana das coordenadas
-      dos seus locais, que não é afetada por esses erros isolados, e não corresponde à sede do município.</li>
+    <li>A Justiça Eleitoral informa a situação de acessibilidade de cada seção, e essa informação não foi verificada em campo. Por isso o
+      site diz que uma seção "consta como acessível", e não que ela é acessível.</li>
+    <li>O cadastro inclui só os eleitores que informaram a deficiência ao TSE. O número real de eleitores com deficiência
+      deve ser maior.</li>
+    <li>Algumas coordenadas de locais de votação nos dados do TSE estão erradas. Há, por exemplo, locais de Poços de
+      Caldas/MG com coordenadas no Rio Grande do Sul. O ponto de cada município no mapa usa a mediana das coordenadas dos
+      seus locais, que esses erros isolados não deslocam. Esse ponto não marca a sede do município.</li>
   </ul>
 </section>
 <section class="cartao" id="dados">
   <h2>Conjunto de dados aberto</h2>
-  <p>Os dados tratados estão disponíveis em CSV (licença CC BY 4.0). Nenhum arquivo contém informação individual de eleitores:
-    as contagens de eleitores com deficiência estão agregadas por local de votação e por município.</p>
+  <p>Os dados tratados estão em arquivos CSV, com licença CC BY 4.0. Nenhum arquivo traz informação individual de
+    eleitores. Os eleitores com deficiência aparecem só em totais por local de votação e por município.</p>
   <ul>
-    <li><a href="/dados/municipios.csv">municipios.csv</a>: indicadores e grupo de cada município</li>
-    <li><a href="/dados/grupos.csv">grupos.csv</a>: resumo dos quatro grupos</li>
-    <li><a href="/dados/locais.csv">locais.csv</a>: indicadores de cada local de votação</li>
-    <li><a href="/dados/secoes.csv">secoes.csv</a>: situação de cada seção (sem dados de eleitores com deficiência)</li>
-    <li><a href="/dados/kmeans_avaliacao.csv">kmeans_avaliacao.csv</a>: silhueta e inércia de k = 2 a 8</li>
-    <li><a href="/dados/README.md">README.md</a>: dicionário de dados</li>
+    <li><a href="/dados/municipios.csv">municipios.csv</a>, com os indicadores e o grupo de cada município.</li>
+    <li><a href="/dados/grupos.csv">grupos.csv</a>, com o resumo dos quatro grupos.</li>
+    <li><a href="/dados/locais.csv">locais.csv</a>, com os indicadores de cada local de votação.</li>
+    <li><a href="/dados/secoes.csv">secoes.csv</a>, com a situação de cada seção, sem dados de eleitores com deficiência.</li>
+    <li><a href="/dados/kmeans_avaliacao.csv">kmeans_avaliacao.csv</a>, com a silhueta e a inércia de 2 a 8 grupos.</li>
+    <li><a href="/dados/README.md">README.md</a>, com a descrição de cada coluna.</li>
   </ul>
 </section>
 {% endblock %}

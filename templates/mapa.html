@@ -1,10 +1,10 @@
 {% extends "base.html" %}
-{% block titulo %}Mapa do Brasil – perfis de acessibilidade eleitoral{% endblock %}
+{% block titulo %}Mapa dos perfis de acessibilidade eleitoral{% endblock %}
 {% block head %}<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">{% endblock %}
 {% block conteudo %}
 <h1>Mapa dos perfis de acessibilidade eleitoral</h1>
-<p>Cada ponto é um município, colorido pelo grupo em que o k-means o colocou. Clique em um ponto para ver o município.
-  Use as caixas abaixo para mostrar ou esconder cada grupo.</p>
+<p>Cada ponto é um município. A cor indica o grupo em que o k-means colocou o município. Clique em um ponto para ver
+  o nome e o link para a página do município. As caixas abaixo mostram ou escondem cada grupo.</p>
 <fieldset class="filtros">
   <legend>Grupos exibidos</legend>
   {% for g in grupos %}
@@ -13,7 +13,7 @@
   {% endfor %}
 </fieldset>
 <div id="mapa" class="mapa-grande" role="img" aria-label="Mapa do Brasil com os municípios coloridos por grupo"></div>
-<p class="dica">O ponto fica no centro dos locais de votação do município. Uma tabela com todos os municípios está no <a href="/sobre#dados">conjunto de dados</a>.</p>
+<p class="dica">O ponto fica na mediana das coordenadas dos locais de votação do município. A lista completa de municípios está no <a href="/sobre#dados">conjunto de dados</a>.</p>
 {% endblock %}
 {% block scripts %}
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>

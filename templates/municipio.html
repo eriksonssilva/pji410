@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block titulo %}{{ m.nm_municipio }}/{{ m.uf }} – acessibilidade eleitoral{% endblock %}
+{% block titulo %}Acessibilidade eleitoral em {{ m.nm_municipio }}/{{ m.uf }}{% endblock %}
 {% block head %}<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">{% endblock %}
 {% block conteudo %}
 <p class="migalha"><a href="/">Início</a> › {{ m.nm_municipio }}/{{ m.uf }}</p>
@@ -9,7 +9,7 @@
 
 <ul class="indicadores">
   <li><span class="valor">{{ m.pct_secoes_acessiveis|br(1) }}%</span> das {{ m.qt_secoes|br }} seções constam como acessíveis</li>
-  <li><span class="valor">{{ m.qt_locais_sem_acess }} de {{ m.qt_locais }}</span> locais de votação não têm nenhuma seção que conste como acessível</li>
+  <li><span class="valor">{{ m.qt_locais_sem_acess }} de {{ m.qt_locais }}</span> locais de votação sem nenhuma seção que conste como acessível</li>
   <li><span class="valor">{{ m.pcd_sem_acess|br }} de {{ m.pcd_total|br }}</span> eleitores com deficiência cadastrada ({{ m.pct_pcd_sem_acess|br(1) }}%) votam em seções sem acessibilidade</li>
   <li><span class="valor">{{ m.pcd_por_mil|br(1) }}</span> eleitores com deficiência cadastrados a cada mil eleitores</li>
 </ul>
@@ -26,7 +26,7 @@
       <tr><th scope="row">Eleitores com deficiência em seções sem acessibilidade (%)</th><td>{{ m.pct_pcd_sem_acess|br(1) }}</td><td>{{ grupo.mediana_pct_pcd_sem_acess|br(1) }}</td><td>{{ brasil.pct_pcd_sem_acess|br(1) }}</td></tr>
     </tbody>
   </table>
-  <p class="dica">No Brasil, o valor é calculado sobre o total de seções, locais e eleitores do país.</p>
+  <p class="dica">A coluna Brasil usa o total de seções, locais e eleitores do país.</p>
 </section>
 
 <section class="cartao">

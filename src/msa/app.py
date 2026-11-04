@@ -22,15 +22,15 @@ CAMINHO_DB = os.environ.get('MSA_DB', str(RAIZ / 'data' / 'msa.sqlite'))
 
 CORES = {1: '#D55E00', 2: '#E69F00', 3: '#56B4E9', 4: '#009E73'}  # paleta Okabe-Ito (daltonismo)
 DESCRICOES = {
-    1: 'Quase nenhuma seção consta como acessível e a maioria dos locais não tem nenhuma seção '
-       'acessível. Em geral, são municípios pequenos.',
-    2: 'Municípios de médio e grande porte em que parte das seções consta como acessível. Como têm '
-       'muitos eleitores, é aqui que está a maior parte dos eleitores com deficiência que votam em '
-       'seções sem acessibilidade.',
-    3: 'A maioria das seções consta como acessível, e a proporção de eleitores com deficiência '
-       'cadastrados é alta.',
-    4: 'A maioria das seções consta como acessível, e a proporção de eleitores com deficiência '
-       'cadastrados é baixa.',
+    1: 'Quase nenhuma seção consta como acessível. Na maioria dos locais de votação, todas as seções '
+       'estão sem acessibilidade. A maior parte desses municípios é pequena.',
+    2: 'Municípios médios e grandes, com parte das seções acessível. Eles têm a maioria dos eleitores '
+       'do país e, por isso, a maioria dos eleitores com deficiência que votam em seções sem '
+       'acessibilidade.',
+    3: 'A maioria das seções consta como acessível. Esses municípios têm mais eleitores com '
+       'deficiência cadastrados a cada mil eleitores do que os do grupo 4.',
+    4: 'A maioria das seções consta como acessível. Esses municípios têm menos eleitores com '
+       'deficiência cadastrados a cada mil eleitores do que os do grupo 3.',
 }
 
 banco: db.Banco | None = None
@@ -50,7 +50,7 @@ app.mount('/dados', StaticFiles(directory=DATASET), name='dados')
 templates = Jinja2Templates(directory=RAIZ / 'templates')
 templates.env.globals.update(cores=CORES, descricoes=DESCRICOES)
 templates.env.filters['br'] = lambda v, casas=0: (
-    f'{v:,.{casas}f}'.replace(',', 'X').replace('.', ',').replace('X', '.') if v is not None else '–')
+    f'{v:,.{casas}f}'.replace(',', 'X').replace('.', ',').replace('X', '.') if v is not None else 'sem dado')
 
 
 def pagina(request, nome, **ctx):

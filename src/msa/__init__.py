@@ -1,1 +1,1 @@
-"""Minha Seção é Acessível? — análise da acessibilidade eleitoral com dados abertos do TSE."""
+"""Minha Seção é Acessível? Análise da acessibilidade eleitoral com dados abertos do TSE."""
