@@ -4,6 +4,7 @@ Rodar localmente: uv run uvicorn msa.app:app --reload
 Variáveis de ambiente:
   MSA_DATASET  pasta com os CSVs do dataset (padrão: dataset)
   MSA_DB       arquivo SQLite gerado na inicialização (padrão: data/msa.sqlite)
+  MSA_ROOT     pasta com templates/ e static/ (padrão: raiz do repositório)
 """
 import os
 from contextlib import asynccontextmanager
@@ -16,7 +17,7 @@ from fastapi.templating import Jinja2Templates
 
 from msa import db
 
-RAIZ = Path(__file__).resolve().parents[2]
+RAIZ = Path(os.environ.get('MSA_ROOT', Path(__file__).resolve().parents[2]))
 DATASET = os.environ.get('MSA_DATASET', str(RAIZ / 'dataset'))
 CAMINHO_DB = os.environ.get('MSA_DB', str(RAIZ / 'data' / 'msa.sqlite'))
 
