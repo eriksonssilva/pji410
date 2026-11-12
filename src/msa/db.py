@@ -118,6 +118,12 @@ class Banco:
         b['pcd_por_mil'] = round(1000 * b['pcd_total'] / b['eleitores'], 1)
         return b
 
+    def mediana_pcd_por_mil(self):
+        """Eleitores com deficiência a cada mil no município típico (mediana dos municípios)."""
+        valores = [r['pcd_por_mil'] for r in self._todos('SELECT pcd_por_mil FROM municipios ORDER BY pcd_por_mil')]
+        meio = len(valores) // 2
+        return valores[meio] if len(valores) % 2 else (valores[meio - 1] + valores[meio]) / 2
+
     def pontos_mapa(self):
         return self._todos('SELECT cd_municipio, nm_municipio, uf, lat, lon, grupo, '
                            'pct_secoes_acessiveis, pcd_sem_acess FROM municipios '

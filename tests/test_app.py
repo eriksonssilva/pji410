@@ -63,3 +63,23 @@ def test_nenhuma_pagina_afirma_que_secao_e_acessivel(cliente):
 
 def test_dataset_para_download(cliente):
     assert cliente.get('/dados/municipios.csv').status_code == 200
+
+
+# Melhorias pedidas no teste com a comunidade (Formulário 2)
+
+def test_grupos_3_e_4_dizem_com_o_que_comparam(cliente):
+    texto = cliente.get('/grupos').text
+    assert 'acima do típico' in texto and 'abaixo do típico' in texto
+    assert 'No município típico do Brasil, são' in texto
+
+
+def test_cores_dos_grupos_1_e_2_sao_diferentes(cliente):
+    from msa.app import CORES
+    assert CORES[1] == '#D55E00' and CORES[2] == '#CC79A7'
+    assert len(set(CORES.values())) == 4
+
+
+def test_tabelas_viram_cartoes_no_celular(cliente):
+    texto = cliente.get('/municipio/50350').text
+    assert 'tabela cartoes' in texto and 'data-label="Situação"' in texto
+    assert '@media (max-width: 640px)' in cliente.get('/static/estilo.css').text

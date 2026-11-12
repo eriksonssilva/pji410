@@ -21,18 +21,31 @@ RAIZ = Path(os.environ.get('MSA_ROOT', Path(__file__).resolve().parents[2]))
 DATASET = os.environ.get('MSA_DATASET', str(RAIZ / 'dataset'))
 CAMINHO_DB = os.environ.get('MSA_DB', str(RAIZ / 'data' / 'msa.sqlite'))
 
-CORES = {1: '#D55E00', 2: '#E69F00', 3: '#56B4E9', 4: '#009E73'}  # paleta Okabe-Ito (daltonismo)
+# paleta Okabe-Ito (daltonismo). O grupo 2 era laranja (#E69F00) e um participante achou parecido com o grupo 1.
+CORES = {1: '#D55E00', 2: '#CC79A7', 3: '#56B4E9', 4: '#009E73'}
 DESCRICOES = {
     1: 'Quase nenhuma seção consta como acessível. Na maioria dos locais de votação, todas as seções '
        'estão sem acessibilidade. A maior parte desses municípios é pequena.',
     2: 'Municípios médios e grandes, com parte das seções acessível. Eles têm a maioria dos eleitores '
        'do país e, por isso, a maioria dos eleitores com deficiência que votam em seções sem '
        'acessibilidade.',
-    3: 'A maioria das seções consta como acessível. Esses municípios têm mais eleitores com '
-       'deficiência cadastrados a cada mil eleitores do que os do grupo 4.',
-    4: 'A maioria das seções consta como acessível. Esses municípios têm menos eleitores com '
-       'deficiência cadastrados a cada mil eleitores do que os do grupo 3.',
+    3: 'A maioria das seções consta como acessível. No município típico deste grupo, {grupo} de cada '
+       'mil eleitores têm deficiência cadastrada. No município típico do Brasil, são {brasil}.',
+    4: 'A maioria das seções consta como acessível. No município típico deste grupo, {grupo} de cada '
+       'mil eleitores têm deficiência cadastrada. No município típico do Brasil, são {brasil}.',
 }
+
+
+def br(v, casas=0):
+    if v is None:
+        return 'sem dado'
+    return f'{v:,.{casas}f}'.replace(',', 'X').replace('.', ',').replace('X', '.')
+
+
+def descrever(g):
+    """Descrição do grupo, com a comparação explícita para os grupos 3 e 4."""
+    return DESCRICOES[g['grupo']].format(grupo=br(g['mediana_pcd_por_mil'], 1),
+                                         brasil=br(banco.mediana_pcd_por_mil(), 1))
 
 banco: db.Banco | None = None
 
@@ -49,9 +62,8 @@ app = FastAPI(title='Minha Seção é Acessível?', lifespan=lifespan)
 app.mount('/static', StaticFiles(directory=RAIZ / 'static'), name='static')
 app.mount('/dados', StaticFiles(directory=DATASET), name='dados')
 templates = Jinja2Templates(directory=RAIZ / 'templates')
-templates.env.globals.update(cores=CORES, descricoes=DESCRICOES)
-templates.env.filters['br'] = lambda v, casas=0: (
-    f'{v:,.{casas}f}'.replace(',', 'X').replace('.', ',').replace('X', '.') if v is not None else 'sem dado')
+templates.env.globals.update(cores=CORES, descrever=descrever)
+templates.env.filters['br'] = br
 
 
 def pagina(request, nome, **ctx):

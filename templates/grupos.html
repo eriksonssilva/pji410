@@ -10,21 +10,21 @@
 <section class="cartao">
   <h2>Os grupos encontrados</h2>
   <div class="rolagem-x">
-  <table class="tabela">
+  <table class="tabela cartoes">
     <thead><tr><th scope="col">Grupo</th><th scope="col">Municípios</th><th scope="col">Seções acessíveis (mediana)</th>
       <th scope="col">Locais sem nenhuma seção acessível (mediana)</th><th scope="col">Eleitores com deficiência a cada mil (mediana)</th>
       <th scope="col">Eleitores (mediana)</th><th scope="col">Eleitores com deficiência em seção sem acessibilidade (total)</th></tr></thead>
     <tbody>
     {% for g in grupos %}
-      <tr><th scope="row" style="--cor: {{ cores[g.grupo] }}"><span class="bolinha" aria-hidden="true"></span>{{ g.grupo }}. {{ g.nome }}</th><td>{{ g.municipios|br }}</td>
-        <td>{{ g.mediana_pct_secoes_acessiveis|br(1) }}%</td><td>{{ g.mediana_pct_locais_sem_acess|br(1) }}%</td>
-        <td>{{ g.mediana_pcd_por_mil|br(1) }}</td><td>{{ g.mediana_eleitores|br }}</td><td>{{ g.pcd_sem_acess|br }}</td></tr>
+      <tr><th scope="row" style="--cor: {{ cores[g.grupo] }}"><span class="bolinha" aria-hidden="true"></span>{{ g.grupo }}. {{ g.nome }}</th><td data-label="Municípios">{{ g.municipios|br }}</td>
+        <td data-label="Seções acessíveis (mediana)">{{ g.mediana_pct_secoes_acessiveis|br(1) }}%</td><td data-label="Locais sem nenhuma seção acessível (mediana)">{{ g.mediana_pct_locais_sem_acess|br(1) }}%</td>
+        <td data-label="Eleitores com deficiência a cada mil (mediana)">{{ g.mediana_pcd_por_mil|br(1) }}</td><td data-label="Eleitores (mediana)">{{ g.mediana_eleitores|br }}</td><td data-label="Eleitores com deficiência em seção sem acessibilidade (total)">{{ g.pcd_sem_acess|br }}</td></tr>
     {% endfor %}
     </tbody>
   </table>
   </div>
   <ul class="lista-grupos">
-    {% for g in grupos %}<li style="--cor: {{ cores[g.grupo] }}"><h3><span class="bolinha" aria-hidden="true"></span>Grupo {{ g.grupo }}</h3><p>{{ descricoes[g.grupo] }}</p></li>{% endfor %}
+    {% for g in grupos %}<li style="--cor: {{ cores[g.grupo] }}"><h3><span class="bolinha" aria-hidden="true"></span>Grupo {{ g.grupo }}</h3><p>{{ descrever(g) }}</p></li>{% endfor %}
   </ul>
 </section>
 
@@ -43,7 +43,9 @@
     <li><strong>Número de grupos.</strong> O modelo rodou com 2 a 8 grupos. Para cada caso, o projeto mediu a inércia,
       usada no método do cotovelo, e o coeficiente de silhueta, que vai de -1 a 1 e cresce quando os grupos ficam mais
       separados.</li>
-    <li><strong>Nomes dos grupos.</strong> Cada grupo recebeu um nome a partir das medianas dos seus indicadores.</li>
+    <li><strong>Nomes dos grupos.</strong> Cada grupo recebeu um nome a partir das medianas dos seus indicadores. Quando
+      o nome fala em "típico", a comparação é com o município típico do Brasil, isto é, a mediana dos municípios: metade
+      deles fica acima desse valor e metade fica abaixo.</li>
   </ol>
   <canvas id="grafico-k" height="200" role="img" aria-label="Gráfico da silhueta e da inércia para cada número de grupos"></canvas>
   <table class="tabela">

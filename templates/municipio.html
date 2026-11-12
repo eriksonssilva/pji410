@@ -5,7 +5,7 @@
 <p class="migalha"><a href="/">Início</a> › {{ m.nm_municipio }}/{{ m.uf }}</p>
 <h1>{{ m.nm_municipio }}/{{ m.uf }}</h1>
 <p>{% with g = grupo %}{% include "_grupo.html" %}{% endwith %}</p>
-<p>{{ descricoes[m.grupo] }} <a href="/grupos">O que são os grupos?</a></p>
+<p>{{ descrever(grupo) }} <a href="/grupos">O que são os grupos?</a></p>
 
 <ul class="indicadores">
   <li><span class="valor">{{ m.pct_secoes_acessiveis|br(1) }}%</span> das {{ m.qt_secoes|br }} seções constam como acessíveis</li>
@@ -16,14 +16,15 @@
 
 <section class="cartao">
   <h2>Comparação com o grupo e com o Brasil</h2>
-  <canvas id="grafico" height="220" role="img" aria-label="Gráfico de barras comparando o município, a mediana do grupo e o Brasil"></canvas>
-  <table class="tabela">
+  <div class="grafico-caixa"><canvas id="grafico" role="img" aria-label="Gráfico de barras comparando o município, a mediana do grupo e o Brasil"></canvas></div>
+  <table class="tabela cartoes">
     <caption>Os mesmos valores do gráfico</caption>
     <thead><tr><th scope="col">Indicador</th><th scope="col">{{ m.nm_municipio }}</th><th scope="col">Mediana do grupo {{ m.grupo }}</th><th scope="col">Brasil</th></tr></thead>
     <tbody>
-      <tr><th scope="row">Seções que constam como acessíveis (%)</th><td>{{ m.pct_secoes_acessiveis|br(1) }}</td><td>{{ grupo.mediana_pct_secoes_acessiveis|br(1) }}</td><td>{{ brasil.pct_secoes_acessiveis|br(1) }}</td></tr>
-      <tr><th scope="row">Locais sem nenhuma seção acessível (%)</th><td>{{ m.pct_locais_sem_acess|br(1) }}</td><td>{{ grupo.mediana_pct_locais_sem_acess|br(1) }}</td><td>{{ brasil.pct_locais_sem_acess|br(1) }}</td></tr>
-      <tr><th scope="row">Eleitores com deficiência em seções sem acessibilidade (%)</th><td>{{ m.pct_pcd_sem_acess|br(1) }}</td><td>{{ grupo.mediana_pct_pcd_sem_acess|br(1) }}</td><td>{{ brasil.pct_pcd_sem_acess|br(1) }}</td></tr>
+      {% set cols = [m.nm_municipio, 'Mediana do grupo ' ~ m.grupo, 'Brasil'] %}
+      <tr><th scope="row">Seções que constam como acessíveis (%)</th><td data-label="{{ cols[0] }}">{{ m.pct_secoes_acessiveis|br(1) }}</td><td data-label="{{ cols[1] }}">{{ grupo.mediana_pct_secoes_acessiveis|br(1) }}</td><td data-label="{{ cols[2] }}">{{ brasil.pct_secoes_acessiveis|br(1) }}</td></tr>
+      <tr><th scope="row">Locais sem nenhuma seção acessível (%)</th><td data-label="{{ cols[0] }}">{{ m.pct_locais_sem_acess|br(1) }}</td><td data-label="{{ cols[1] }}">{{ grupo.mediana_pct_locais_sem_acess|br(1) }}</td><td data-label="{{ cols[2] }}">{{ brasil.pct_locais_sem_acess|br(1) }}</td></tr>
+      <tr><th scope="row">Eleitores com deficiência em seções sem acessibilidade (%)</th><td data-label="{{ cols[0] }}">{{ m.pct_pcd_sem_acess|br(1) }}</td><td data-label="{{ cols[1] }}">{{ grupo.mediana_pct_pcd_sem_acess|br(1) }}</td><td data-label="{{ cols[2] }}">{{ brasil.pct_pcd_sem_acess|br(1) }}</td></tr>
     </tbody>
   </table>
   <p class="dica">A coluna Brasil usa o total de seções, locais e eleitores do país.</p>
@@ -34,16 +35,16 @@
   <div id="mapa-locais" class="mapa-medio" role="img" aria-label="Mapa dos locais de votação do município, coloridos pela situação de acessibilidade"></div>
   <ul class="legenda">
     <li><span class="bolinha" style="--cor:#0072B2"></span>Todas as seções constam como acessíveis</li>
-    <li><span class="bolinha" style="--cor:#E69F00"></span>Parte das seções</li>
+    <li><span class="bolinha" style="--cor:#F0E442"></span>Parte das seções</li>
     <li><span class="bolinha" style="--cor:#D55E00"></span>Nenhuma seção</li>
   </ul>
   <div class="rolagem">
-  <table class="tabela">
+  <table class="tabela cartoes">
     <thead><tr><th scope="col">Local</th><th scope="col">Bairro</th><th scope="col">Zona</th><th scope="col">Seções</th><th scope="col">Constam como acessíveis</th><th scope="col">Situação</th></tr></thead>
     <tbody>
       {% for l in locais %}
-      <tr><td>{{ l.nm_local }}</td><td>{{ l.bairro }}</td><td>{{ l.nr_zona }}</td><td>{{ l.qt_secoes }}</td><td>{{ l.qt_secoes_acessiveis }}</td>
-        <td>{{ {'todas': 'Todas', 'parcial': 'Parte', 'nenhuma': 'Nenhuma'}[l.status] }}</td></tr>
+      <tr><th scope="row">{{ l.nm_local }}</th><td data-label="Bairro">{{ l.bairro }}</td><td data-label="Zona">{{ l.nr_zona }}</td><td data-label="Seções">{{ l.qt_secoes }}</td><td data-label="Constam como acessíveis">{{ l.qt_secoes_acessiveis }}</td>
+        <td data-label="Situação">{{ {'todas': 'Todas', 'parcial': 'Parte', 'nenhuma': 'Nenhuma'}[l.status] }}</td></tr>
       {% endfor %}
     </tbody>
   </table>
@@ -57,7 +58,8 @@
   new Chart(document.getElementById('grafico'), {
     type: 'bar',
     data: {
-      labels: ['Seções acessíveis', 'Locais sem nenhuma seção acessível', 'Eleitores com deficiência em seção sem acessibilidade'],
+      // rótulos em várias linhas para caberem na tela do celular
+      labels: [['Seções', 'acessíveis'], ['Locais sem', 'nenhuma seção', 'acessível'], ['Eleitores com', 'deficiência em', 'seção sem', 'acessibilidade']],
       datasets: [
         {label: {{ m.nm_municipio|tojson }}, backgroundColor: '#1b3a5c',
          data: [{{ m.pct_secoes_acessiveis }}, {{ m.pct_locais_sem_acess }}, {{ m.pct_pcd_sem_acess }}]},
@@ -67,10 +69,11 @@
          data: [{{ brasil.pct_secoes_acessiveis }}, {{ brasil.pct_locais_sem_acess }}, {{ brasil.pct_pcd_sem_acess }}]},
       ],
     },
-    options: {indexAxis: 'y', scales: {x: {min: 0, max: 100, title: {display: true, text: '%'}}}},
+    options: {indexAxis: 'y', maintainAspectRatio: false,
+              scales: {x: {min: 0, max: 100, title: {display: true, text: '%'}}, y: {ticks: {autoSkip: false}}}},
   });
 
-  const cores = {todas: '#0072B2', parcial: '#E69F00', nenhuma: '#D55E00'};
+  const cores = {todas: '#0072B2', parcial: '#F0E442', nenhuma: '#D55E00'};
   const situacao = {todas: 'todas as seções', parcial: 'parte das seções', nenhuma: 'nenhuma seção'};
   fetch('/api/locais/{{ m.cd_municipio }}').then(r => r.json()).then(locais => {
     const mapa = L.map('mapa-locais', {preferCanvas: true});

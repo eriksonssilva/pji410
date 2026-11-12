@@ -47,7 +47,7 @@
     {% for g in grupos %}
     <li style="--cor: {{ cores[g.grupo] }}">
       <h3><span class="bolinha" aria-hidden="true"></span>Grupo {{ g.grupo }}: {{ g.nome }}</h3>
-      <p>{{ descricoes[g.grupo] }}</p>
+      <p>{{ descrever(g) }}</p>
       <p class="numeros">{{ g.municipios|br }} municípios. Neles, {{ g.pcd_sem_acess|br }} eleitores com deficiência votam em seções sem acessibilidade.</p>
     </li>
     {% endfor %}

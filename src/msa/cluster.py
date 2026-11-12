@@ -29,8 +29,8 @@ SEMENTE = 42
 NOMES = {
     1: 'Baixa acessibilidade',
     2: 'Municípios maiores com acessibilidade parcial',
-    3: 'Alta acessibilidade e mais eleitores com deficiência cadastrados',
-    4: 'Alta acessibilidade e menos eleitores com deficiência cadastrados',
+    3: 'Alta acessibilidade, proporção de eleitores com deficiência acima do típico',
+    4: 'Alta acessibilidade, proporção de eleitores com deficiência abaixo do típico',
 }
 
 
