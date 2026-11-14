@@ -28,7 +28,7 @@
       (camadas[p.grupo] ??= L.layerGroup().addTo(mapa));
       L.circleMarker([lat, lon], {radius: 4, weight: .5, color: '#333', fillColor: cores[p.grupo], fillOpacity: .85})
         .bindPopup(`<strong>${p.nm_municipio}/${p.uf}</strong><br>Grupo ${p.grupo}: ${nomes[p.grupo - 1]}<br>` +
-                   `${p.pct_secoes_acessiveis.toLocaleString('pt-BR')}% das seções constam como acessíveis<br>` +
+                   `${p.pct_secoes_acessiveis.toLocaleString('pt-BR', {minimumFractionDigits: 1, maximumFractionDigits: 1})}% das seções constam como acessíveis<br>` +
                    `<a href="/municipio/${p.cd_municipio}">Ver município</a>`)
         .addTo(camadas[p.grupo]);
     }
