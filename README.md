@@ -6,6 +6,8 @@ resultados.
 
 Projeto Integrador em Computação IV (PJI410), Univesp, 2026.
 
+Autor: Erikson Souza da Silva ([@eriksonssilva](https://github.com/eriksonssilva)).
+
 O site tem quatro partes:
 
 - A consulta por seção mostra se uma seção consta como acessível nos dados do TSE, a partir da UF, da zona e da seção.
